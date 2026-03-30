@@ -1,0 +1,40 @@
+# Build results
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.so
+*.dylib
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Runtime configuration
+appsettings.*.json
+!appsettings.Development.json
+
+# Dependencies
+packages/
+.nuget/
+
+# NuGet
+.nuget/NuGet.Config
+*.nupkg
+*.snupkg
