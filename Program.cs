@@ -1,5 +1,8 @@
 using FluentValidation;
+using FluentValidation.AspNetCore;
+using LibraryApi.Data;
 using LibraryApi.Validation;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDbContext<LibraryDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add FluentValidation
 builder.Services.AddFluentValidationAutoValidation();

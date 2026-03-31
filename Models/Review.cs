@@ -1,7 +1,8 @@
 namespace LibraryApi.Models;
+
 public class Review
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
     
     public string UserName { get; set; } = string.Empty;
     

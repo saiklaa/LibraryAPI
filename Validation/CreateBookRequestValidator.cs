@@ -1,4 +1,3 @@
-using System.Data;
 using FluentValidation;
 using LibraryApi.Dtos.Books;
 using LibraryApi.Validation;
@@ -9,17 +8,17 @@ public class CreateBookRequestValidator : AbstractValidator<CreateBookRequest>
 {
     public CreateBookRequestValidator()
     {
-        RuleFor(CreateBookRequest => CreateBookRequest.Title)
+        RuleFor(x => x.Title)
         .NotEmpty().WithMessage(ValidationConstants.RequiredMessage)
         .MinimumLength(ValidationConstants.TitleMinLength).WithMessage(ValidationConstants.MinLengthMessage)
         .MaximumLength(ValidationConstants.TitleMaxLength).WithMessage(ValidationConstants.MaxLengthMessage);
 
-        RuleFor(CreateBookRequest => CreateBookRequest.Author)
+        RuleFor(x => x.Author)
         .NotEmpty().WithMessage(ValidationConstants.RequiredMessage)
         .MinimumLength(ValidationConstants.AuthorMinLength).WithMessage(ValidationConstants.MinLengthMessage)
         .MaximumLength(ValidationConstants.AuthorMaxLength).WithMessage(ValidationConstants.MaxLengthMessage);
 
-        RuleFor(CreateBookRequest => CreateBookRequest.YearOfPublication)
+        RuleFor(x => x.YearOfPublication)
         .InclusiveBetween(ValidationConstants.YearMin, ValidationConstants.YearMax)
         .LessThanOrEqualTo(DateTime.UtcNow.Year);
     }

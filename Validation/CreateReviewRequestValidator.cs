@@ -1,8 +1,6 @@
 using FluentValidation;
-using System.Data;
-using LibraryApi.Dtos;
-using LibraryApi.Validation;
 using LibraryApi.Dtos.Reviews;
+using LibraryApi.Validation;
 
 namespace LibraryApi.Validation;
 
@@ -10,15 +8,15 @@ public class CreateReviewRequestValidator : AbstractValidator<CreateReviewReques
 {
     public CreateReviewRequestValidator()
     {
-        RuleFor(CreateReviewRequest => CreateReviewRequest.UserName)
+        RuleFor(x => x.UserName)
         .NotEmpty().WithMessage(ValidationConstants.RequiredMessage)
         .MinimumLength(ValidationConstants.UserNameMinLength).WithMessage(ValidationConstants.MinLengthMessage)
-        .MaximumLength(ValidationConstants.UserNameMaxLegth).WithMessage(ValidationConstants.MaxLengthMessage);
+        .MaximumLength(ValidationConstants.UserNameMaxLength).WithMessage(ValidationConstants.MaxLengthMessage);
 
-        RuleFor(CreateReviewRequest => CreateReviewRequest.Rating)
+        RuleFor(x => x.Rating)
         .InclusiveBetween(ValidationConstants.RatingMin, ValidationConstants.RatingMax);
 
-        RuleFor (CreateReviewRequest => CreateReviewRequest.Comment)
+        RuleFor(x => x.Comment)
         .NotEmpty().WithMessage(ValidationConstants.RequiredMessage)
         .MinimumLength(ValidationConstants.CommentMinLength).WithMessage(ValidationConstants.MinLengthMessage)
         .MaximumLength(ValidationConstants.CommentMaxLength).WithMessage(ValidationConstants.MaxLengthMessage);
