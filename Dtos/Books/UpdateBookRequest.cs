@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using LibraryApi.Models;
 
 namespace LibraryApi.Dtos.Books;

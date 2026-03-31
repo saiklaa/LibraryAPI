@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace LibraryApi.Dtos.Reviews;
 
 public record CreateReviewRequest(
