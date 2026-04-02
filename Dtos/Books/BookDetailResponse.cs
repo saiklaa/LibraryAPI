@@ -10,5 +10,5 @@ public record BookDetailsResponse(
     ReadingStatus ReadingStatus,
     double AverageRating,
     int ReviewsCount,
-    IReadOnlyList<ReviewResponse> Reviews  
+    IReadOnlyList<ReviewResponse> Reviews
 );

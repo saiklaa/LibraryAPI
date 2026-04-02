@@ -1,5 +1,7 @@
+using System.Runtime.InteropServices;
 using AutoMapper;
 using LibraryApi.Data;
+using LibraryApi.Data.Books;
 using LibraryApi.Dtos.Books;
 using LibraryApi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +19,40 @@ public class BookService
         _mapper = mapper;
     }
 
-    public async Task<List<BookResponse>> GetAllBooksAsync()
+    public async Task<List<BookResponse>> GetAllBooksAsync(BooksFilterParameters filter)
     {
-        var books = await _context.Books.ToListAsync();
+        var query = _context.Books.AsQueryable() //Select * From Booksn  
+        .Include(b => b.Reviews)
+        .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(filter.Title))
+        {
+            query = query.Where(b => b.Title.Contains(filter.Title));
+        }
+        
+        if (!string.IsNullOrWhiteSpace(filter.Author))
+        {
+            query = query.Where(b => b.Author.Contains(filter.Author));
+        }
+
+        if (filter.ReadingStatus.HasValue)
+        {
+            query = query.Where(b => b.ReadingStatus == filter.ReadingStatus.Value);
+        }
+
+        if (filter.MinRating.HasValue)
+        {
+            query = query.Where(b => b.Reviews.Any() 
+                ? b.Reviews.Average(reviews => reviews.Rating) >= filter.MinRating.Value
+                : false);
+        }
+
+        var books = await query.ToListAsync();
         return _mapper.Map<List<BookResponse>>(books);
     }
+
+
+
 
     public async Task<BookResponse?> GetBookByIdAsync(Guid bookId)
     {
@@ -29,18 +60,9 @@ public class BookService
         return _mapper.Map<BookResponse>(book);
     }
 
-    public async Task<BookResponse> CreateBookAsync(string title, string author, int yearOfPublication)
+    public async Task<BookResponse> CreateBookAsync(CreateBookRequest createBookRequest)
     {
-        var book = new Book
-        {
-            Title = title,
-            Author = author,
-            YearOfPublication = yearOfPublication
-        };
-        await _context.Books.AddAsync(book);
-        await _context.SaveChangesAsync();
-
-        return _mapper.Map<BookResponse>(book);
+        
     }
 
     public async Task<BookResponse?> UpdateBookAsync(Guid bookid, string title, string author, int yearOfPublication)
