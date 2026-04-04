@@ -2,11 +2,12 @@ using AutoMapper;
 using LibraryApi.Data;
 using LibraryApi.Dtos.Reviews;
 using LibraryApi.Models;
+using LibraryApi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApi.Services;
 
-public class ReviewService
+public class ReviewService 
 {
     private readonly LibraryDbContext _context;
     private readonly IMapper _mapper;
@@ -28,15 +29,17 @@ public class ReviewService
         return _mapper.Map<ReviewResponse>(review);
     }
 
-    public async Task<ReviewResponse> CreateReviewAsync(Guid bookId, string userName, int rating, string comment)
+    public async Task<ReviewResponse?> CreateReviewAsync(Guid bookId, CreateReviewRequest createReviewRequest)
     {
-        var review = new Review
+        var bookExists = await _context.Books.AnyAsync(b => b.Id == bookId);
+        if (bookExists == false)
         {
-            BookId = bookId,
-            UserName = userName,
-            Rating = rating,
-            Comment = comment
-        };
+            return null;
+        }
+        var review = _mapper.Map<Review>(createReviewRequest);
+        review.BookId = bookId;
+
+
         await _context.Reviews.AddAsync(review);
         await _context.SaveChangesAsync();
         return _mapper.Map<ReviewResponse>(review);
@@ -51,14 +54,14 @@ public class ReviewService
         return true;
     }
 
-    public async Task<List<ReviewResponse>> GetReviewByBookIdAsync(Guid bookId)
+    public async Task<List<ReviewResponse>?> GetReviewByBookIdAsync(Guid bookId)
     {
+        var bookExists = await _context.Books.AnyAsync(b => b.Id == bookId);
+        if (bookExists == false ) return null;
+        
         var reviews =  await _context.Reviews
             .Where(review => review.BookId == bookId)
             .ToListAsync();
         return _mapper.Map<List<ReviewResponse>>(reviews);
     }
-
-    
-
 }

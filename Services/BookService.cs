@@ -4,11 +4,12 @@ using LibraryApi.Data;
 using LibraryApi.Data.Books;
 using LibraryApi.Dtos.Books;
 using LibraryApi.Models;
+using LibraryApi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApi.Services;
 
-public class BookService
+public class BookService : IBookService
 {
     private readonly LibraryDbContext _context;
     private readonly IMapper _mapper;
@@ -52,26 +53,29 @@ public class BookService
     }
 
 
-
-
     public async Task<BookResponse?> GetBookByIdAsync(Guid bookId)
     {
-        var book = await _context.Books.FindAsync(bookId);
+        var book = await _context.Books
+            .Include(b => b.Reviews)
+            .FirstOrDefaultAsync(b => b.Id ==bookId);
         return _mapper.Map<BookResponse>(book);
     }
-
+    
     public async Task<BookResponse> CreateBookAsync(CreateBookRequest createBookRequest)
     {
-        
-    }
+        var book = _mapper.Map<Book>(createBookRequest);
+        await _context.Books.AddAsync(book);
+        await _context.SaveChangesAsync();
+        return _mapper.Map<BookResponse>(book);
 
-    public async Task<BookResponse?> UpdateBookAsync(Guid bookid, string title, string author, int yearOfPublication)
+    }
+    public async Task<BookResponse?> UpdateBookAsync(Guid bookId, UpdateBookRequest updateBookRequest)
     {
-        var book = await _context.Books.FindAsync(bookid);
-        if(book == null) return null;
-        book.Title = title;
-        book.Author = author;
-        book.YearOfPublication = yearOfPublication;
+        var book = await _context.Books
+            .Include(b => b.Reviews)
+            .FirstOrDefaultAsync(b => b.Id == bookId);
+        if (book == null) return null;
+        _mapper.Map(updateBookRequest, book);
         await _context.SaveChangesAsync();
         return _mapper.Map<BookResponse>(book);
     }
