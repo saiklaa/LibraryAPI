@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibraryApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/books")]
 
-public class ReviewsControllers : ControllerBase
+public class ReviewsController : ControllerBase
 {
     private readonly IReviewService _reviewService;
-    public ReviewsControllers(IReviewService reviewService)
+    public ReviewsController(IReviewService reviewService)
     {
         _reviewService = reviewService;
     }
@@ -23,7 +23,7 @@ public class ReviewsControllers : ControllerBase
         return review == null ? NotFound() : Ok(review);
     }
 
-    [HttpPost("books/{id:guid}/reviews")]
+    [HttpPost("{id:guid}/reviews")]
     public async Task<IActionResult> Create(Guid id, [FromBody] CreateReviewRequest createReviewRequest)
     {
         var result = await _reviewService.CreateReviewAsync(id, createReviewRequest);
@@ -39,7 +39,7 @@ public class ReviewsControllers : ControllerBase
         return result == false ? NotFound() : NoContent();
     }
 
-    [HttpGet("books/{bookId:guid}/reviews")]
+    [HttpGet("{bookId:guid}/reviews")]
     public async Task<IActionResult> GetByBookId(Guid bookId)
     {
         var result = await _reviewService.GetReviewByBookIdAsync(bookId);

@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using AutoMapper;
 using LibraryApi.Data;
 using LibraryApi.Data.Books;
@@ -47,18 +46,26 @@ public class BookService : IBookService
                 ? b.Reviews.Average(reviews => reviews.Rating) >= filter.MinRating.Value
                 : false);
         }
+        query = filter.SortBy?.ToLower() switch
+        {   
+            "title"  => query.OrderBy(b => b.Title),
+            "year"   => query.OrderBy(b => b.YearOfPublication),
+            "rating" => query.OrderByDescending(b =>
+                        b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0),
+            _=> query.OrderBy(b => b.Title)
+};
 
         var books = await query.ToListAsync();
         return _mapper.Map<List<BookResponse>>(books);
     }
 
 
-    public async Task<BookResponse?> GetBookByIdAsync(Guid bookId)
+    public async Task<BookDetailsResponse?> GetBookByIdAsync(Guid bookId)
     {
         var book = await _context.Books
             .Include(b => b.Reviews)
             .FirstOrDefaultAsync(b => b.Id ==bookId);
-        return _mapper.Map<BookResponse>(book);
+        return book == null ? null : _mapper.Map<BookDetailsResponse>(book);
     }
     
     public async Task<BookResponse> CreateBookAsync(CreateBookRequest createBookRequest)

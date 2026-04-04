@@ -8,11 +8,11 @@ namespace LibraryApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BooksControllers : ControllerBase
+public class BooksController : ControllerBase
 {
     private readonly IBookService _bookService;
 
-    public BooksControllers(IBookService bookService)
+    public BooksController(IBookService bookService)
     {
         _bookService = bookService;
     }
