@@ -4,6 +4,8 @@ using LibraryApi.Data;
 using LibraryApi.Validation;
 using LibraryApi.Mapping;
 using Microsoft.EntityFrameworkCore;
+using LibraryApi.Services.Interfaces;
+using LibraryApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddDbContext<LibraryDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 // Add FluentValidation
 builder.Services.AddFluentValidationAutoValidation();

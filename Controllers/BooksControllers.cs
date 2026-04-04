@@ -24,7 +24,7 @@ public class BooksControllers : ControllerBase
         return Ok(books);
     }
 
-    [HttpGet("id:guid")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
         var book = await _bookService.GetBookByIdAsync(id);
@@ -38,7 +38,7 @@ public class BooksControllers : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = bookResponse.Id }, bookResponse);
     }
 
-    [HttpPut("id:guid")]
+    [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateBook(Guid id, [FromBody] UpdateBookRequest updateBookRequest)
     {
         var updateBook = await _bookService.UpdateBookAsync(id, updateBookRequest);
@@ -46,7 +46,7 @@ public class BooksControllers : ControllerBase
         return updateBook == null ? NotFound() : Ok(updateBook);
     }
 
-    [HttpDelete("id:guid")]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteBook(Guid id)
     {
         var result = await _bookService.DeleteBookAsync(id);

@@ -2,7 +2,7 @@ using AutoMapper;
 using LibraryApi.Dtos.Books;
 using LibraryApi.Dtos.Reviews;
 using LibraryApi.Models;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+
 
 namespace LibraryApi.Mapping;
 
@@ -25,5 +25,8 @@ public class MappingProfile : Profile
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
     
         CreateMap<Review, ReviewResponse>();
+
+        CreateMap<CreateBookRequest, Book>();
+        CreateMap<CreateReviewRequest, Review>();
     }
 }

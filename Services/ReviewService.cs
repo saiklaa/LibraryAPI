@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApi.Services;
 
-public class ReviewService 
+public class ReviewService :IReviewService
 {
     private readonly LibraryDbContext _context;
     private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ public class ReviewService
         _mapper = mapper;
     }
 
-    public async Task<List<ReviewResponse>> GetAllReviewAsync()
+    public async Task<List<ReviewResponse>?> GetAllReviewsAsync()
     {
         var reviews = await _context.Reviews.ToListAsync();
         return _mapper.Map<List<ReviewResponse>>(reviews);
