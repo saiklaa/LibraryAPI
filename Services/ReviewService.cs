@@ -17,7 +17,7 @@ public class ReviewService :IReviewService
         _mapper = mapper;
     }
 
-    public async Task<List<ReviewResponse>?> GetAllReviewsAsync()
+    public async Task<List<ReviewResponse>> GetAllReviewsAsync()
     {
         var reviews = await _context.Reviews.ToListAsync();
         return _mapper.Map<List<ReviewResponse>>(reviews);
@@ -56,12 +56,12 @@ public class ReviewService :IReviewService
 
     public async Task<List<ReviewResponse>?> GetReviewByBookIdAsync(Guid bookId)
     {
-        var bookExists = await _context.Books.AnyAsync(b => b.Id == bookId);
-        if (bookExists == false ) return null;
+        var book = await _context.Books
+            .Include(b => b.Reviews)
+            .FirstOrDefaultAsync(b => b.Id == bookId);
         
-        var reviews =  await _context.Reviews
-            .Where(review => review.BookId == bookId)
-            .ToListAsync();
-        return _mapper.Map<List<ReviewResponse>>(reviews);
+        if (book == null) return null;  
+        
+        return _mapper.Map<List<ReviewResponse>>(book.Reviews);  
     }
 }
