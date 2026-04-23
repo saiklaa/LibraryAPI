@@ -21,9 +21,9 @@ public class BookService : IBookService
 
     public async Task<List<BookResponse>> GetAllBooksAsync(BooksFilterParameters filter)
     {
-        var query = _context.Books.AsQueryable() //Select * From Booksn  
-        .Include(b => b.Reviews)
-        .AsQueryable();
+        var query = _context.Books
+            .Include(b => b.Reviews)
+            .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(filter.Title))
         {
