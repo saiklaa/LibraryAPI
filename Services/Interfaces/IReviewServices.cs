@@ -4,10 +4,10 @@ namespace LibraryApi.Services.Interfaces;
 
 public interface IReviewService
 {
-    public Task<List<ReviewResponse>> GetAllReviewsAsync();
-    public Task<ReviewResponse?> GetReviewByIdAsync(Guid reviewId);
-    public Task<ReviewResponse?> CreateReviewAsync(Guid bookId, CreateReviewRequest createReviewRequest);
-    public Task<bool> DeleteReviewAsync(Guid reviewId);
-    public Task<List<ReviewResponse>?> GetReviewByBookIdAsync(Guid bookId);
+    Task<List<ReviewResponse>> GetAllReviewsAsync();
+    Task<ReviewResponse?> GetReviewByIdAsync(Guid reviewId);
+    Task<ReviewResponse?> CreateReviewAsync(Guid bookId, CreateReviewRequest createReviewRequest);
+    Task<bool> DeleteReviewAsync(Guid reviewId);
+    Task<List<ReviewResponse>?> GetReviewByBookIdAsync(Guid bookId);
 
 }
