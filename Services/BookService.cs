@@ -1,6 +1,5 @@
 using AutoMapper;
 using LibraryApi.Data;
-using LibraryApi.Data.Books;
 using LibraryApi.Dtos.Books;
 using LibraryApi.Models;
 using LibraryApi.Services.Interfaces;

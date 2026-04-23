@@ -1,6 +1,6 @@
 using LibraryApi.Models;
 
-namespace LibraryApi.Data.Books;
+namespace LibraryApi.Dtos.Books;
 
 public record BooksFilterParameters
 {
