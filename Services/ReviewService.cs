@@ -26,6 +26,7 @@ public class ReviewService :IReviewService
     public async Task<ReviewResponse?> GetReviewByIdAsync(Guid reviewId)
     {
         var review = await _context.Reviews.FindAsync(reviewId);
+        if (review == null) return null;
         return _mapper.Map<ReviewResponse>(review);
     }
 
