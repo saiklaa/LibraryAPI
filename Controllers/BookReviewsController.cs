@@ -20,7 +20,7 @@ public class BookReviewsController : ControllerBase
         var result = await _reviewService.CreateReviewAsync(bookId, createReviewRequest);
         return result == null
             ? NotFound()
-            : CreatedAtAction(nameof(ReviewsController.GetReviewByIdAsync), new { reviewId = result.Id }, result);
+            : CreatedAtAction(nameof(ReviewsController.GetReviewByIdAsync), new { controller = "Reviews", reviewId = result.Id }, result);
     }
 
     [HttpGet]
